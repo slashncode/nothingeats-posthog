@@ -12,7 +12,7 @@ Public dashboards (real visitors only, so mostly quiet until the shop goes live)
 | File | What |
 |---|---|
 | `flags.tf` | The web app's experiment flags (`deal-countdown`, `checkout-copy`, `coach-placement`), the coach's kill switch `craving-coach`, the wheel's `spin-wheel-odds` |
-| `experiments.tf` | One experiment per flag, with its metrics; the wheel's odds experiment (still a draft) |
+| `experiments.tf` | One experiment per flag, with its metrics, and the wheel's odds experiment |
 | `surveys.tf` | The post-delivery survey "Wie befriedigend war nichts?" (German, English translation) |
 | `imports.tf` | What was built in the UI before this repository: `craving-coach`, `spin-wheel-odds`, its experiment, the survey |
 | `dashboard-shop.tf` | "NothingEats: ordering nothing": money not spent, the funnel from a menu to nothing delivered, orders, retention (also by streak), who sees which variant, searches that found nothing |

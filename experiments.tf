@@ -104,8 +104,8 @@ resource "posthog_experiment" "coach_placement" {
   }
 }
 
-# Phase 4's experiment, built in the UI and never launched: its only metric counted $pageview
-# under the name order_placed. Kept a draft until it is launched on purpose.
+# Phase 4's experiment, built in the UI and never launched (its only metric counted $pageview
+# under the name order_placed); launched from here on 2026-11-08.
 resource "posthog_experiment" "spin_wheel_odds" {
   name             = "Spin wheel odds"
   description      = "Do generous odds on the level-up wheel (more free dishes and 20 % coupons, fewer bonus XP) bring customers back to order more nothing? The variant names an odds profile in the backoffice; loyalty-service evaluates the flag at every spin."
@@ -133,6 +133,6 @@ resource "posthog_experiment" "spin_wheel_odds" {
   exposure_criteria = jsonencode({ filterTestAccounts = true })
 
   status {
-    state = "draft"
+    state = "running"
   }
 }

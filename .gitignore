@@ -1,0 +1,5 @@
+.terraform/
+*.tfplan
+terraform.tfstate.backup
+crash.log
+.DS_Store

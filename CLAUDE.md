@@ -7,7 +7,7 @@ The NothingEats PostHog project as code (OpenTofu + the `posthog/posthog` provid
 Toolchain from the workspace `mise.toml` (`mise exec -- …`).
 
 - `scripts/tofu.sh plan` / `scripts/tofu.sh apply` — the only way to run OpenTofu against PostHog: it decrypts the API key and the state passphrase from `~/.config/nothingeats/posthog-iac.sops.yaml` into the process environment.
-- `tofu fmt -recursive`, and `TF_VAR_state_passphrase=validate-only-not-a-secret tofu init && tofu validate` — what CI runs.
+- `tofu fmt -recursive`, and `TF_VAR_state_passphrase=validate-only-not-a-secret tofu init -backend=false && tofu validate` — what CI runs.
 - `scripts/share.sh` — enables and prints the dashboards' public links.
 
 ## Rules

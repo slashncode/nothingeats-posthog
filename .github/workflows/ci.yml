@@ -19,7 +19,8 @@ jobs:
           tofu_wrapper: false
       - run: tofu fmt -check -recursive
       # CI has neither the PostHog key nor the state passphrase: it checks the configuration, it
-      # never plans against PostHog. The passphrase below only satisfies the encryption block.
-      - run: tofu init -input=false && tofu validate
+      # never reads the (encrypted) state or plans against PostHog. The passphrase below only
+      # satisfies the encryption block.
+      - run: tofu init -backend=false -input=false && tofu validate
         env:
           TF_VAR_state_passphrase: validate-only-not-a-secret

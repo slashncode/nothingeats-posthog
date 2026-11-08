@@ -58,3 +58,38 @@ resource "posthog_feature_flag" "coach_placement" {
     ignore_changes = [filters]
   }
 }
+
+# The Craving Coach's rollout and kill switch; assistant-service evaluates it locally.
+resource "posthog_feature_flag" "craving_coach" {
+  key                          = "craving-coach"
+  name                         = "Craving Coach: rollout and kill switch (assistant-service, evaluated locally)"
+  ensure_experience_continuity = false
+  filters = jsonencode({
+    groups = [{ properties = [], rollout_percentage = 100 }]
+  })
+}
+
+# The wheel's odds: the variant names an odds profile the backoffice publishes (loyalty-service
+# evaluates it locally). The weights used to be the variants' payloads; they live in the
+# backoffice now, so the flag carries none. Activated when its experiment launches; once the
+# experiment ships a variant, add `filters` to ignore_changes like the web app's flags.
+resource "posthog_feature_flag" "spin_wheel_odds" {
+  key                          = "spin-wheel-odds"
+  name                         = "Spin wheel odds: the backoffice's odds profile per variant (loyalty-service, evaluated locally)"
+  ensure_experience_continuity = false
+  filters = jsonencode({
+    groups = [{ properties = [], rollout_percentage = 100 }]
+    multivariate = {
+      variants = [
+        { key = "control", rollout_percentage = 50 },
+        { key = "generous", rollout_percentage = 50 },
+      ]
+    }
+    # Leaving the key out keeps PostHog's old payloads; an empty map removes them.
+    payloads = {}
+  })
+
+  lifecycle {
+    ignore_changes = [active]
+  }
+}

@@ -33,6 +33,9 @@ resource "posthog_experiment" "deal_countdown" {
     }
   ])
 
+  # Leaves out the project's test accounts (Settings → test account filters).
+  exposure_criteria = jsonencode({ filterTestAccounts = true })
+
   status {
     state = "running"
   }
@@ -51,6 +54,9 @@ resource "posthog_experiment" "checkout_copy" {
       series      = [{ kind = "EventsNode", event = "order_placed" }]
     }
   ])
+
+  # Leaves out the project's test accounts (Settings → test account filters).
+  exposure_criteria = jsonencode({ filterTestAccounts = true })
 
   status {
     state = "running"
@@ -90,7 +96,43 @@ resource "posthog_experiment" "coach_placement" {
     }
   ])
 
+  # Leaves out the project's test accounts (Settings → test account filters).
+  exposure_criteria = jsonencode({ filterTestAccounts = true })
+
   status {
     state = "running"
+  }
+}
+
+# Phase 4's experiment, built in the UI and never launched: its only metric counted $pageview
+# under the name order_placed. Kept a draft until it is launched on purpose.
+resource "posthog_experiment" "spin_wheel_odds" {
+  name             = "Spin wheel odds"
+  description      = "Do generous odds on the level-up wheel (more free dishes and 20 % coupons, fewer bonus XP) bring customers back to order more nothing? The variant names an odds profile in the backoffice; loyalty-service evaluates the flag at every spin."
+  feature_flag_key = posthog_feature_flag.spin_wheel_odds.key
+
+  metrics = jsonencode([
+    {
+      kind        = "ExperimentMetric"
+      metric_type = "funnel"
+      name        = "Placed an order"
+      series      = [{ kind = "EventsNode", event = "order_placed" }]
+    }
+  ])
+
+  metrics_secondary = jsonencode([
+    {
+      kind        = "ExperimentMetric"
+      metric_type = "funnel"
+      name        = "Redeemed a coupon"
+      series      = [{ kind = "EventsNode", event = "coupon_applied" }]
+    }
+  ])
+
+  # Leaves out the project's test accounts (Settings → test account filters).
+  exposure_criteria = jsonencode({ filterTestAccounts = true })
+
+  status {
+    state = "draft"
   }
 }

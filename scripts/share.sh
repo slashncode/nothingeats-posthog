@@ -3,6 +3,8 @@
 # links. Idempotent: an existing link stays the same. The provider has no resource for sharing.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+# Outside an activated mise shell, run again with the workspace toolchain (sops, tofu).
+command -v sops >/dev/null && command -v tofu >/dev/null || exec mise exec -- "$0" "$@"
 
 secrets="${NOTHINGEATS_POSTHOG_SECRETS:-$HOME/.config/nothingeats/posthog-iac.sops.yaml}"
 key="$(sops -d --extract '["personal-api-key"]' "$secrets")"

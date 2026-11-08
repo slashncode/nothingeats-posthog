@@ -203,7 +203,8 @@ resource "posthog_dashboard_layout" "shop" {
   dashboard_id = posthog_dashboard.shop.id
   tiles = [
     {
-      text_body    = file("${path.module}/text/shop.md")
+      # PostHog trims the body; the provider matches text tiles by their exact body.
+      text_body    = trimspace(file("${path.module}/text/shop.md"))
       layouts_json = jsonencode({ sm = { x = 0, y = 0, w = 12, h = 3 } })
     },
     { insight_id = posthog_insight.money_not_spent.id, layouts_json = jsonencode({ sm = { x = 0, y = 3, w = 4, h = 4 } }) },

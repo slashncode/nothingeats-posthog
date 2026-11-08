@@ -139,7 +139,8 @@ resource "posthog_dashboard_layout" "coach" {
   dashboard_id = posthog_dashboard.coach.id
   tiles = [
     {
-      text_body    = file("${path.module}/text/coach.md")
+      # PostHog trims the body; the provider matches text tiles by their exact body.
+      text_body    = trimspace(file("${path.module}/text/coach.md"))
       layouts_json = jsonencode({ sm = { x = 0, y = 0, w = 12, h = 2 } })
     },
     { insight_id = posthog_insight.coach_turns.id, layouts_json = jsonencode({ sm = { x = 0, y = 2, w = 6, h = 5 } }) },
